@@ -1,0 +1,44 @@
+class TattooShop:
+    def __init__(self, name, location, art_style, pricing):
+        self.name = name
+        self.location = location
+        self.art_style = art_style
+        self.pricing = pricing
+
+def find_tattoo_shops(criteria):
+    # This is where you'd connect to your database or API
+    all_shops = [
+        TattooShop('Ink Masters', 'New York', 'tribal', 'expensive'),
+        TattooShop('Art Tattoos', 'Los Angeles', 'minimalist', 'moderate'),
+        TattooShop('Made to Last', 'Charlotte', 'realism', 'expensive')
+        # add more shops...
+    ]
+
+    matches = []
+
+    for shop in all_shops:
+        if all(getattr(shop, key) == value for key, value in criteria.items()):
+            matches.append(shop)
+
+    return matches
+
+def get_user_criteria():
+    criteria = {}
+    criteria['location'] = input('Enter preferred location: ')
+    criteria['art_style'] = input('Enter preferred art style: ')
+    criteria['pricing'] = input('Enter preferred pricing: ')
+    
+    return criteria
+
+def main():
+    criteria = get_user_criteria()
+    matches = find_tattoo_shops(criteria)
+    
+    if matches:
+        for shop in matches:
+            print(f'Found match: {shop.name} in {shop.location}')
+    else:
+        print('No matches found')
+
+if __name__ == '__main__':
+    main()
