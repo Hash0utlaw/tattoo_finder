@@ -1,0 +1,19 @@
+import project
+
+def test_find_tattoo_shops():
+    criteria = {'location': 'New York', 'art_style': 'tribal', 'pricing': 'expensive'}
+    matches = project.find_tattoo_shops(criteria)
+    assert len(matches) == 1
+    assert matches[0].name == 'Ink Masters'
+
+def test_get_user_criteria(monkeypatch):
+    monkeypatch.setattr('builtins.input', lambda _: 'New York')
+    criteria = project.get_user_criteria()
+    assert criteria == {'location': 'New York', 'art_style': 'New York', 'pricing': 'New York'}
+
+def test_main(capsys, monkeypatch):
+    monkeypatch.setattr('builtins.input', lambda _: 'New York')
+    monkeypatch.setattr('project.find_tattoo_shops', lambda _: [project.TattooShop('Ink Masters', 'New York', 'tribal', 'expensive')])
+    project.main()
+    captured = capsys.readouterr()
+    assert 'Found match: Ink Masters in New York' in captured.out
