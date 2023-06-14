@@ -1,0 +1,3 @@
+pytest
+kivy==2.0.0+
+python3
