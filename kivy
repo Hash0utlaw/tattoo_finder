@@ -1,0 +1,50 @@
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.textinput import TextInput
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+
+# Make sure to import your find_tattoo_shops function
+from project import find_tattoo_shops
+
+class TattooShopFinder(BoxLayout):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.orientation = 'vertical'
+
+        self.location_input = TextInput(hint_text='Enter location')
+        self.art_style_input = TextInput(hint_text='Enter art style') 
+        self.pricing_input = TextInput(hint_text='Enter pricing')
+        self.find_button = Button(text='Find shops')
+        self.result_label = Label()
+
+        self.find_button.bind(on_press=self.find_shops)
+
+        self.add_widget(self.location_input)
+        self.add_widget(self.art_style_input)
+        self.add_widget(self.pricing_input)
+        self.add_widget(self.find_button)
+        self.add_widget(self.result_label)
+
+    def find_shops(self, instance):
+        criteria = {
+            'location': self.location_input.text,
+            'art_style': self.art_style_input.text,
+            'pricing': self.pricing_input.text,
+        }
+        matches = find_tattoo_shops(criteria)
+        if matches:
+            result_text = '\n'.join(f'{shop.name} in {shop.location}' for shop in matches)
+        else:
+            result_text = 'No matches found'
+        self.result_label.text = result_text
+
+
+class TattooShopApp(App):
+    def build(self):
+        return TattooShopFinder()
+
+
+if __name__ == '__main__':
+    TattooShopApp().run()
